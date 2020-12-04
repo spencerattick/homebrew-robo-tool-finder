@@ -7,9 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "robo-cli-test": "index/index.js"
+    "run-robo-cli": "index/index.js"
   },
-  "keywords": ["robo-cli-test2"],
   "author": "",
   "license": "ISC",
   "dependencies": {

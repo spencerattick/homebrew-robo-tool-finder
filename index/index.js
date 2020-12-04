@@ -75,46 +75,136 @@ function listToolOptions() {
 }
 
 function showSpecificToolDetails(toolNumber) {
-  if (toolCategoryInput === 'Personas') {
-    console.log(chalk.magenta('\n\Here are details about the following tool - ' + chalk.bold(chalk.underline(`${personasToolOptions[toolNumber].option}:\n`))));
-    console.log(`Command: ${personasToolOptions[toolNumber].command}\n`);
-    console.log(`Description: ${personasToolOptions[toolNumber].description}\n`);
-    console.log(`Documentation Link: ${personasToolOptions[toolNumber].documentationLink}\n`);
-  } else if (toolCategoryInput === 'Warehouses') {
-    for (const num in warehousesToolOptions) {
-      console.log(`${warehousesToolOptions[num].option}\n`)
-    }
-  } else if (toolCategoryInput === 'Cloud Sources') {
-    for (const num in cloudSourcesToolOptions) {
-      console.log(`${cloudSourcesToolOptions[num].option}\n`)
-    }
-  } else if (toolCategoryInput === 'Replay') {
-    for (const num in replayToolOptions) {
-      console.log(`${replayToolOptions[num].option}\n`)
-    }
-  } else if (toolCategoryInput === 'Robo') {
-    for (const num in roboToolOptions) {
-      console.log(`${roboToolOptions[num].option}\n`)
-    }
+  let objToUse;
+
+  if (Number(toolNumber) === NaN) {
+    console.log(chalk.red('\n\nError: Input should be a number. Please try again.'));
+    rl.close();
   }
+
+  if (toolCategoryInput === 'Personas') {
+    objToUse = personasToolOptions;
+  } else if (toolCategoryInput === 'Cloud Sources') {
+    objToUse = cloudSourcesToolOptions;
+  } else if (toolCategoryInput === 'Warehouses') {
+    objToUse = warehousesToolOptions;
+  } else if (toolCategoryInput === 'Replay') {
+    objToUse = replayToolOptions;
+  } else if (toolCategoryInput === 'Robo') {
+    objToUse = toolCategoryUserInput;
+  }
+
+  console.log(chalk.magenta('\n\Here are details about the following tool - ' + chalk.bold(chalk.underline(`${objToUse[toolNumber].option}: \n`))));
+  console.log(chalk.bold(chalk.underline('Command:')) + ' ' + objToUse[toolNumber].command +'\n');
+  console.log(chalk.bold(chalk.underline('Description:')) + ' ' + objToUse[toolNumber].description +'\n');
+  console.log(chalk.bold(chalk.underline('Documentation Link:')) + ' ' + objToUse[toolNumber].documentationLink +'\n');
 }
 
 
 const personasToolOptions = {
   '1': {
     option: '1) list personas spaces (by workspace)',
-    description: '',
+    description: 'List spaces and space data for a particular workspace.',
     command: '$ robo prod rpc http://space-service.segment.local/rpc Space.List workspace_slug=<WORKSPACE_SLUG> | jq .',
-    documentationLink: ''
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/552502446/Creating+a+Signature+for+Google+Ad+Manager+and+DV360'
   },
   '2': {
     option: '2) connect to prod workbench',
-    description: '',
+    description: 'Connect to the production workbench in order to look up data or executate commands there.',
     command: '$ robo prod.ssh',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/232161896/Personas+Debugging+Guide+for+success'
+  },
+  '3': {
+    option: '',
+    description: '',
+    command: '',
     documentationLink: ''
   }
 }
 
+const cloudSourcesToolOptions = {
+  '1': {
+    option: '1) set source sync frequency',
+    description: 'Set the frequency at which a source will sync from the connected integration.',
+    command: '$ robo prod tool source custom-frequency --project-id=<id> <duration>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592749/Cloud+Sources+Guide+for+Success+v2#%E2%86%92-Set-Source-Sync-Frequency'
+  },
+  '2': {
+    option: '2) add a Mongo setting for a project',
+    description: 'Add a setting to the Mongo entry for a source.',
+    command: '$ tool source settings --project-id=<id> <setting_name> <setting_value>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592749/Cloud+Sources+Guide+for+Success+v2#%E2%86%92-Update-mongo-settings-for-a-project'
+  },
+  '3': {
+    option: '3) stop a currently running sync',
+    description: 'Force a sync that is currently running to stop.',
+    command: '$ robo prod tool task force-run source --workspace=<workspace_slug> --project=<project_id> --force',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592749/Cloud+Sources+Guide+for+Success+v2#%E2%86%92-Stop-syncs-that-are-running'
+  }
+}
+
+const warehousesToolOptions = {
+  '1': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  },
+  '2': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  },
+  '3': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  }
+}
+
+const replayToolOptions = {
+  '1': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  },
+  '2': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  },
+  '3': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  }
+}
+
+const roboToolOptions = {
+  '1': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  },
+  '2': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  },
+  '3': {
+    option: '',
+    description: '',
+    command: '',
+    documentationLink: ''
+  }
+}
 
 //message indicating tool has closed
 rl.on("close", function() {
