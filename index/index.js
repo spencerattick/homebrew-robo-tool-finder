@@ -98,6 +98,7 @@ function showSpecificToolDetails(toolNumber) {
   console.log(chalk.bold(chalk.underline('Command:')) + ' ' + objToUse[toolNumber].command +'\n');
   console.log(chalk.bold(chalk.underline('Description:')) + ' ' + objToUse[toolNumber].description +'\n');
   console.log(chalk.bold(chalk.underline('Documentation Link:')) + ' ' + objToUse[toolNumber].documentationLink +'\n');
+  rl.close();
 }
 
 
@@ -115,10 +116,10 @@ const personasToolOptions = {
     documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/232161896/Personas+Debugging+Guide+for+success'
   },
   '3': {
-    option: '',
-    description: '',
-    command: '',
-    documentationLink: ''
+    option: '3) connect to Personas database',
+    description: 'Connect to SQL database where Audience/Trait data is stored.',
+    command: '$ robo personas-db production control',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/232161896/Personas+Debugging+Guide+for+success'
   }
 }
 
@@ -145,22 +146,22 @@ const cloudSourcesToolOptions = {
 
 const warehousesToolOptions = {
   '1': {
-    option: '',
-    description: '',
-    command: '',
-    documentationLink: ''
+    option: '1) install/upgrage warehouse tool',
+    description: 'Install or upgrade "warehouse tool".',
+    command: '$ robo prod ensure-warehouse-tool',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Installing-%2F-Upgrading'
   },
   '2': {
-    option: '',
-    description: '',
-    command: '',
-    documentationLink: ''
+    option: '2) start a backfill',
+    description: 'Initiate a backfill (replay) from a specified source to a warehouse.',
+    command: '$ robo prod warehouse-tool replay -w <warehouse_id> -p <source_id>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Running-Replays-(aka%3A-%22Backfills%22)'
   },
   '3': {
-    option: '',
-    description: '',
-    command: '',
-    documentationLink: ''
+    option: '3) manually start warehouse sync',
+    description: 'Manually initiate a warehouse sync for a particular project.',
+    command: '$ robo prod warehouse-tool run -w <warehouse_id> -p <source_id>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Manually-Start-a-Run'
   }
 }
 
