@@ -2,7 +2,7 @@
 
 This tool was designed to house information about all robo commands all in one place!
 
-##Installation
+## Installation
 
 1. $ git clone https://github.com/spencerattick/homebrew-robo-tool-finder.git
 2. $ cd homebrew-robo-cli
