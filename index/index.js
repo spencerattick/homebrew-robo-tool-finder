@@ -45,6 +45,9 @@ function determineToolCategory(toolCategoryUserInput) {
     console.log(chalk.red(chalk.bold('\n\nI\'m sorry, that input is not valid. Please try again or contact @spencer on Slack for help.')));
     rl.close();
   }
+
+  console.clear();
+
   console.log('------------------------------------------------------');
   console.log('------------------------------------------------------');
   console.log(chalk.magenta('\nHere are your tool options for '+ chalk.bold(chalk.underline(`${toolCategoryInput}`)) + ':\n'));
@@ -94,6 +97,8 @@ function showSpecificToolDetails(toolNumber) {
     objToUse = toolCategoryUserInput;
   }
 
+  console.clear();
+
   console.log(chalk.magenta('\n\Here are details about the following tool - ' + chalk.bold(chalk.underline(`${objToUse[toolNumber].option}: \n`))));
   console.log(chalk.bold(chalk.underline('Command:')) + ' ' + objToUse[toolNumber].command +'\n');
   console.log(chalk.bold(chalk.underline('Description:')) + ' ' + objToUse[toolNumber].description +'\n');
@@ -110,7 +115,7 @@ const personasToolOptions = {
     documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/552502446/Creating+a+Signature+for+Google+Ad+Manager+and+DV360'
   },
   '2': {
-    option: '2) connect to prod workbench',
+    option: '2) connect to production workbench',
     description: 'Connect to the production workbench in order to look up data or executate commands there.',
     command: '$ robo prod.ssh',
     documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/232161896/Personas+Debugging+Guide+for+success'
@@ -120,6 +125,18 @@ const personasToolOptions = {
     description: 'Connect to SQL database where Audience/Trait data is stored.',
     command: '$ robo personas-db production control',
     documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/232161896/Personas+Debugging+Guide+for+success'
+  },
+  '4': {
+    option: '4) enable/disable Additive SQL Trait feature',
+    description: 'Enable or disable the Additive SQL Trait feature (this is not known to all customers).',
+    command: 'Follow the instructions in the docs.',
+    documentationLink: 'https://paper.dropbox.com/doc/Additive-SQL-Traits--BCmEW~ZTb6sDQihFLRhgkNcnAg-WM4kD1226OapVsPiiQWdh'
+  },
+  '5': {
+    option: '5) disable Audiences with script',
+    description: 'Mass disable Audiences programattically (this is not known to all customers).',
+    command: 'Follow the instructions in the docs.',
+    documentationLink: 'https://paper.dropbox.com/doc/Disabling-audiences-script--BCmJUMRo~JEdOwi~jOpzK2tvAg-Ea72wQFZjay4v8i2humPX'
   }
 }
 
@@ -158,28 +175,106 @@ const warehousesToolOptions = {
     documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Running-Replays-(aka%3A-%22Backfills%22)'
   },
   '3': {
-    option: '3) manually start warehouse sync',
-    description: 'Manually initiate a warehouse sync for a particular project.',
+    option: '3) stop a backfill',
+    description: 'Stop a backfill (replay) from a specified source to a warehouse.',
+    command: '$ robo prod warehouse-tool sync -w <warehouse_id> -p <source_id> -r <run_id> stop',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Running-Replays-(aka%3A-%22Backfills%22)'
+  },
+  '4': {
+    option: '4) check a backfill',
+    description: 'Get the current run details for a backfill.',
+    command: '$ o prod warehouse-tool sync -w <warehouse_id> -p <source_id> -r <run_id> [tasks]',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Checking-Sync-Status'
+  },
+  '5': {
+    option: '5) manually start warehouse sync',
+    description: 'Manually start a warehouse sync for a particular project.',
     command: '$ robo prod warehouse-tool run -w <warehouse_id> -p <source_id>',
     documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Manually-Start-a-Run'
+  },
+  '6': {
+    option: '6) get information about last run per source',
+    description: 'Look up information about the most recent warehouse sync for a specific source.',
+    command: '$ robo prod warehouse-tool sync -w <warehouse_id> -p <project_id>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Checking-Sync-Status'
+  },
+  '7': {
+    option: '7) get information about last run per workspace',
+    description: 'Look up information about the most recent warehouse sync for a workspace.',
+    command: '$ robo prod warehouse-tool sync -W <workspace_slug>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Checking-Sync-Status'
+  },
+  '8': {
+    option: '8) connect to customer\'s warehouse',
+    description: 'Connect to a customer\'s warehouse in order to run queries.',
+    command: '$ robo prod warehouse-tool cli -w <warehouse_id>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Check-the-Connection-to-a-Customer%E2%80%99s-Warehouse'
+  },
+  '9': {
+    option: '9) check the connection to customer\'s warehouse',
+    description: 'Get information about the connection from a customer\'s warehouse to Segment.',
+    command: '$ robo prod warehouse-tool ping -w <warehouse_id>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Check-the-Connection-to-a-Customer%E2%80%99s-Warehouse'
+  },
+  '10': {
+    option: '10) show currently running syncs per warehouse',
+    description: 'Get a list of syncs that are currently running per warehouse.',
+    command: '$ robo prod warehouse-tool running -w <warehouse_id> [-t replay|run] [-k redshift|posgres|bigquery]',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Show-Currently-Running-Syncs'
+  },
+  '11': {
+    option: '11) show currently running syncs per workspace',
+    description: 'Get a list of syncs that are currently running per workspace.',
+    command: '$ robo prod warehouse-tool running -W <workspace_slug> [-t replay|run] [-k redshift|posgres|bigquery]',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Show-Currently-Running-Syncs'
+  },
+  '12': {
+    option: '12) show warehouse information',
+    description: 'Get information about a certain warehouse.',
+    command: '$ robo prod warehouse-tool info -W <workspace_slug>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Show-Warehouse-Info'
+  },
+  '13': {
+    option: '13) view internal schema',
+    description: 'See how the internal schema is set for a particular collection.',
+    command: '$ robo prod warehouse-tool schemas -p <source_id> -c <collection> [-w <warehouse_id]',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#View-internal-schema'
+  },
+  '14': {
+    option: '14) change column type',
+    description: 'Change the column type of the internal schema.',
+    command: 'Refer to the documentation.',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Change-Column-Type'
+  },
+  '15': {
+    option: '15) disable a table from syncing',
+    description: 'Disable a table from syncing to a warehouse programattically.',
+    command: '$ robo prod warehouse-tool schemas update-collections -w <warehouse_id> -p <source_id> [-c <collection>] --disable [--dry-run]',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Disable-events%2Ftables'
+  },
+  '16': {
+    option: '16) disable properties from syncing',
+    description: 'Disable properties from syncing to a warehouse programattically. (See documentation for more details.)',
+    command: '$ robo prod warehouse-tool schemas update -p <source_id> -c <collection> -P <property (regex)> --disable [--dry-run]',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Disable-properties'
+  },
+  '17': {
+    option: '17) enable tables to sync',
+    description: 'Enable previously disabled tables to sync to a warehouse.',
+    command: '$ robo prod warehouse-tool schemas update-collections -p <project> -c <collection> --enable [--dry-run]',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Enable-events%2Ftables'
+  },
+  '18': {
+    option: '18) enable properties to sync',
+    description: 'Enable previously disabled properties to sync to a warehouse.',
+    command: '$ robo prod warehouse-tool schemas update -p <source_id> -c <collection> -P <property (regex)> --disable [--dry-run]',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Enable-properties'
   }
 }
 
 const replayToolOptions = {
   '1': {
-    option: '',
-    description: '',
-    command: '',
-    documentationLink: ''
-  },
-  '2': {
-    option: '',
-    description: '',
-    command: '',
-    documentationLink: ''
-  },
-  '3': {
-    option: '',
+    option: 'TO BE FILLED IN',
     description: '',
     command: '',
     documentationLink: ''
@@ -188,19 +283,7 @@ const replayToolOptions = {
 
 const roboToolOptions = {
   '1': {
-    option: '',
-    description: '',
-    command: '',
-    documentationLink: ''
-  },
-  '2': {
-    option: '',
-    description: '',
-    command: '',
-    documentationLink: ''
-  },
-  '3': {
-    option: '',
+    option: 'TO BE FILLED IN',
     description: '',
     command: '',
     documentationLink: ''
