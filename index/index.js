@@ -269,6 +269,30 @@ const warehousesToolOptions = {
     description: 'Enable previously disabled properties to sync to a warehouse.',
     command: '$ robo prod warehouse-tool schemas update -p <source_id> -c <collection> -P <property (regex)> --disable [--dry-run]',
     documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Enable-properties'
+  },
+  '19': {
+    option: '19) customize deduplication window for warehouses (not BigQuery)',
+    description: 'Customize the window that Segment will look back for duplicate records.',
+    command: '$ robo prod warehouse-tool feature dedupe-window -w <warehouse_id> --window <timeframe>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Customize-the-de-dupe-window-for-a-Warehouse-(does-NOT-apply-to-BigQuery)'
+  },
+  '20': {
+    option: '20) disable deduplication for a warehouse',
+    description: 'Disable a warehouse from looking for and removing duplicates.',
+    command: '$ robo prod warehouse-tool feature dedupe-window -w <warehouse_id> --none',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Customize-the-de-dupe-window-for-a-Warehouse-(does-NOT-apply-to-BigQuery)'
+  },
+  '21': {
+    option: '21) change max number of connections for a warehouse',
+    description: 'This can be lowered if a customer has many sources and needs Segment to make fewer connections.',
+    command: '$ robo prod warehouse-tool feature max-connections -m 2 -w <warehouse_id>',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Change-the-max-connections-for-a-Warehouse'
+  },
+  '22': {
+    option: '22) increase VARCHAR',
+    description: 'Increase the number of characters allows in a VARCHAR column type.',
+    command: 'See the documentation.',
+    documentationLink: 'https://segment.atlassian.net/wiki/spaces/JUNGLEBOOK/pages/338592807/Warehouses+Guide+for+Success+v2#Increase-VARCHAR'
   }
 }
 
