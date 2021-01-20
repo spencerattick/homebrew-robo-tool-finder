@@ -307,9 +307,9 @@ const replayToolOptions = {
 
 const roboToolOptions = {
   '1': {
-    option: 'TO BE FILLED IN',
-    description: '',
-    command: '',
+    option: '1) update robo',
+    description: 'Update the robo tool.',
+    command: '$ robo update',
     documentationLink: ''
   }
 }
