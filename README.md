@@ -19,7 +19,7 @@ pwd
 #Sample output: /Users/niall.brennan/Documents/homebrew-robo-tool-finder
 ```
 
-Use the output from the above to add an alias (might be easier to write this commadn out in a text editor)
+Use the output from the above to add an alias (might be easier to write this command out in a text editor)
 
 ```
 # If you're using ZSH as your shell (echo $SHELL should output /bin/zsh):
